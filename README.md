@@ -1,3 +1,5 @@
+# THIS IS THE 0.9.1 (PRE-UI-CHANGE) VERSION OF SKYSYNTH. CHECK OUT THE [NEWEST VERSION](https://github.com/manystarsapart/skysynth)
+
 # Overview
 greetings ! this is a beginner's first attempt at making something in javascript. hope it is not too buggy
 
