@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="SkySynth">
+    <meta property="og:description" content="play notes and stuff. now with transpose, octave and record!">
+    <meta property="og:image" content="http://www.skysynth.space/assets/thumbnail.jpeg">
+    <meta property="og:url" content="https://www.skysynth.space">
+
+    <title>SkySynth</title>
+    <link rel="icon" type="image/png" href="./assets/thumbnail.jpeg"/>
+    <link rel="stylesheet" href="./output.css">
+    <script src="main.js"></script>
+    <script src="./Tone.min.js"></script>
+    <!-- <script src="https://unpkg.com/@tonejs/midi"></script> -->
+</head>
+<body class="bg-black text-white p-5">
+
+<header>
+    <h1 class="text-5xl font-pressstart2p p-5">play notes</h1>
+</header>
+
+<main>
+    <ul class="text-l lg:text-right lg:fixed lg:top-20 lg:right-10">
+        <li>To PLAY <span class="text-green-200">NOTES</span>: press Q W E R T ... & Y U I O P ...</li>
+        <li>To <span class="text-blue-200">TRANSPOSE</span>: press ` 1 2 3 4 5 6 7 8 9 0 - =</li>
+        <li>To PLAY <span class="text-red-300">ACCIDENTALS</span>: hold SHIFT while playing note (e.g. shift + D)</li>
+        <li>To change <span class="text-purple-300">OCTAVES</span>: Down/Up or Left/Right arrow keys</li>
+        <br \>
+        <li><b>laptop only</b>. sorry no phone compatibility yet </li>
+        <li>if you are lost, please try pressing your laptop keyboard for sounds</li>
+        <li>if note persists after releasing, refresh page</li>
+        <li>PLEASE SAVE YOUR RECORDING IF YOU LIKE IT</li>
+        <li>RECORDINGS ARE NOT STORED. IT IS ONE TIME ONLY</li>
+        <li>volume: <span id="volume-value">100% (default)</span></li>
+        <li><input type="range" id="volume-control" min="0" max="100" value="100"></li>
+    </ul>
+    <br \>
+    <ul class="text-xl">
+        <li class="text-yellow-400">current transpose value = <span id="transpose-value">0</span> | current key: <span id="scale-value">C</span></li> 
+        <li class="text-yellow-400"> current octave shift: <span id="octave-value">0 (default)</span></li> 
+        <li class="text-yellow-400"></li>
+        <li class="text-base">(i.e. the current "D" key on the keyboard maps to the music note: <span id="scale-value-2">C</span>)</li>
+        <br \>
+        <li class="text-yellow-400">current music pad layout: <span id="layout-value">double (default)</span></li>
+        <li class="text-base">here's a (dynamic) visual guide for you. try pressing number keys to change keys!</li>
+        <li class="text-base">cumulative time you spent on this page: <span id="cum-time">loading...</span></li>
+        <li class="text-base">cumulative number of notes played: <span id="cum-keypress">loading...</span></li>
+    </ul> 
+
+    <br \>
+
+    <div class="w-full gap-20 flex flex-row items-center justify-center">
+        <div id="notes-div-left" class="grid grid-cols-5 gap-1 p-1 text-2xl">
+            <div id="q" class="flex items-center justify-center p-2">C2</div>
+            <div id="w" class="flex items-center justify-center p-2">D2</div>
+            <div id="e" class="flex items-center justify-center p-2">E2</div>
+            <div id="r" class="flex items-center justify-center p-2">F2</div>
+            <div id="t" class="flex items-center justify-center p-2">G2</div>
+            <div id="a" class="flex items-center justify-center p-2">A2</div>
+            <div id="s" class="flex items-center justify-center p-2">B2</div>
+            <div id="d" class="flex items-center justify-center p-2">C3</div>
+            <div id="f" class="flex items-center justify-center p-2">D3</div>
+            <div id="g" class="flex items-center justify-center p-2">E3</div>
+            <div id="z" class="flex items-center justify-center p-2">F3</div>
+            <div id="x" class="flex items-center justify-center p-2">G3</div>
+            <div id="c" class="flex items-center justify-center p-2">A3</div>
+            <div id="v" class="flex items-center justify-center p-2">B3</div>
+            <div id="b" class="flex items-center justify-center p-2">C4</div>
+        </div>
+            <!-- 
+            C D E F G 
+            A B C D E
+            F G A B C  
+            -->
+        <div id="notes-div-right" class="grid grid-cols-5 gap-1 p-1 text-2xl">
+            <div id="y" class="flex items-center justify-center p-2">C3</div>
+            <div id="u" class="flex items-center justify-center p-2">D3</div>
+            <div id="i" class="flex items-center justify-center p-2">E3</div>
+            <div id="o" class="flex items-center justify-center p-2">F3</div>
+            <div id="p" class="flex items-center justify-center p-2">G3</div>
+            <div id="h" class="flex items-center justify-center p-2">A3</div>
+            <div id="j" class="flex items-center justify-center p-2">B3</div>
+            <div id="k" class="flex items-center justify-center p-2">C4</div>
+            <div id="l" class="flex items-center justify-center p-2">D4</div>
+            <div id=";" class="flex items-center justify-center p-2">E4</div>
+            <div id="n" class="flex items-center justify-center p-2">F4</div>
+            <div id="m" class="flex items-center justify-center p-2">G4</div>
+            <div id="," class="flex items-center justify-center p-2">A4</div>
+            <div id="." class="flex items-center justify-center p-2">B4</div>
+            <div id="/" class="flex items-center justify-center p-2">C5</div>
+        </div>
+    </div>
+
+    <br \>
+    <div class="w-full gap-40 m-4 flex flex-row items-center justify-center text-3xl">
+        <div class="">
+            q w e r t <br \>
+            a s d f g <br \>
+            z x c v b     
+        </div>
+
+        <div class="">
+            y u i o p <br \>
+            h j k l ; <br \>
+            n m , . / <br \>
+        </div>
+    </div>
+
+    <div>
+        instrument: <select name="instrument selection" id="instrument-selection" class="p-3 m-1 rounded-lg border-2 border-white bg-black">
+        </select>
+        effect (experimental): <select name="effect selection" id="effect-selection" class="p-3 m-1 rounded-lg border-2 border-white bg-black">
+        </select>
+        <input type="range" id="effect-level-control" min="0" max="100" value="50">
+        <br \>
+        stop audio when key released: <button id="stop-audio-when-released-button" class="p-3 m-1 rounded-lg border-2 border-white">false</button> (tab to toggle)
+        <br \>
+        <button id="doublekeyboard" class="p-3 m-1 rounded-lg border-2 border-white hover:bg-red-600">double keyboard (default)</button>
+        <button id="singlekeyboard1" class="p-3 m-1 rounded-lg border-2 border-white hover:bg-red-600">single keyboard (low)</button>
+        <button id="singlekeyboard2" class="p-3 m-1 rounded-lg border-2 border-white hover:bg-red-600">single keyboard (high)</button>
+        <button id="clear-button" class="p-3 m-1 rounded-lg border-2 border-white hover:bg-red-600">clear status</button>
+        <!-- <button id="reset-button" class="p-3 m-1 rounded-lg border-2 border-white hover:bg-red-600">reset responses <button> -->
+        <br \>
+        <button id="start-record-button" class="p-3 m-1 rounded-lg border-2 border-white hover:bg-red-600">start recording<button>
+        <button id="stop-record-button" class="p-3 m-1 rounded-lg border-2 border-white hover:bg-red-600">stop recording<button>
+        <button id="play-record-button" class="p-3 m-1 rounded-lg border-2 border-white hover:bg-red-600">play recording<button>
+        <button id="stop-playback-button" class="p-3 m-1 rounded-lg border-2 border-white hover:bg-red-600">stop playback</button>
+        <button id="save-record-button" class="p-3 m-1 rounded-lg border-2 border-white hover:bg-red-600">save recording<button>
+        <!-- <button id="clear-record-button" class="p-3 m-1 rounded-lg border-2 border-white hover:bg-red-600">clear recording<button> -->
+    </div>
+    <div id="status-div" class="max-h-40 text-left p-5 m-4 overflow-y-scroll">
+        
+    </div>
+
+</main>
+
+<footer class="text-xs fixed bottom-0 right-0 p-10 text-right">
+
+    made by @manystarsapart <br>
+    for any feedback, please contact through discord <br>
+    last updated: 10 feb 2025 (happy lunar new year!)<br>
+    <a href="https://github.com/manystarsapart/skysynth/blob/main/CHANGELOG.md">view changelog</a>
+
+    <!-- known issues:
+    1. space being highest note means it auto presses the buttons
+    2. notes can continue to play after being held due to various actions    
+    
+    
+    -->
+
+</footer>
+    
+</body>
+</html>
+
