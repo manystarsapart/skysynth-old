@@ -699,7 +699,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const latency = audioStartTime - keyPressTime;
             console.log(`Latency: ${latency} ms`); 
 
-            currentInstrument.triggerAttack(Tone.Frequency(midiNote, "midi"));
+            currentInstrument.triggerAttack(Tone.Frequency(midiNote, "midi"),Tone.getContext().currentTime);
             document.getElementById(key).style.backgroundColor = "green"; // lights up key to green
             incrementCumKeypress();
 
